@@ -1,0 +1,72 @@
+#Расстояние Левенштейна
+Данный код вычисляет по рекуррентной формуле расстояние между двумя строками методом Вагнера — Фишера 
+
+$$
+\text{D}(i,j) = 
+\begin{cases} 
+0, & \text i = 0 \text{, } j = 0 \\
+i, & \text j = 0 \text{, } i > 0 \\
+j, & \text i = 0 \text{, } j > 0 \\
+\min \left\{
+\begin{array}{l}
+\text{D}(i,j-1) + 1, \\
+\text{D}(i-1,j) + 1, \\
+\text{D}(i-1,j-1) + \ m(S_{1}[i],S_{2}[j]) 
+\end{array}
+\right.
+\end{cases}
+$$
+$$
+$$
+$$\text где \text  { } S_{1}[i],S_{2}[j] \text{ — символы, соответствующие ячейкам i и j}
+$$
+$$
+$$
+$$
+\text m(S_{1}[i],S_{2}[j]) = 
+\begin{cases} 
+1 & \text{если символы } S_{1}[i] \text{ и } S_{2}[i] \text{ не равны друг другу}, \\
+0 & \text{если равны}.
+
+
+\end{cases}
+$$
+
+выводит каждый элемент матрицы D и итоговое значение.
+Вдохновилась [статьей](https://habr.com/ru/articles/676858/#habracut) 
+
+str_1 = input("Введите первое слово для сравнения ")
+str_2 = input("Введите второе слово для сравнения ")
+n = len(str_1)
+m = len(str_2)
+
+# Создаем матрицу расстояний
+dp = [[0] * (n + 1) for _ in range(m + 1)]
+
+# Инициализируем первую строку и первый столбец
+for i in range(m + 1):
+    dp[i][0] = i
+for j in range(n + 1):
+    dp[0][j] = j
+
+# Заполняем матрицу расстояний
+for i in range(1, m + 1):
+    for j in range(1, n + 1):
+        cost = 0 if str_1[j - 1] == str_2[i - 1] else 1
+        dp[i][j] = min(dp[i - 1][j] + 1, dp[i][j - 1] + 1, dp[i - 1][j - 1] + cost)
+
+# Выводим матрицу расстояний
+print("\t", end="\t")
+for char in str_1:
+    print(char, end="\t")
+print()
+for i in range(m + 1):
+    if i > 0:
+        print(str_2[i - 1], end="\t")
+    else:
+        print("\t", end="")
+    for j in range(n + 1):
+        print(dp[i][j], end="\t")
+    print()
+print()
+print(f"Значение расстояния Левенштейна между строками \033[31m{str_1}\033[0m и \033[31m{str_2}\033[0m равно: \033[31m{dp[m][n]}\033[0m")
